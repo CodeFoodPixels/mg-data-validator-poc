@@ -23,7 +23,7 @@ export const ShippingAddressSchema = Joi.object<AddressLocationInfo>({
 export const CreateTransactionSchema = Joi.object<CreateTransaction>({
   id: Joi.number().required(),
   code: Joi.string().min(2).max(6).required(),
-  dateTimeCreated: Joi.date().iso().max("now").required(),
+  dateTimeCreated: Joi.date().iso().max("now").required().label('createdAt'),
   dateTimeCompleted: Joi.date().iso().min(Joi.ref("dateTimeCreated")),
   addresses: Joi.array().items(
     Joi.object<Addresses>({
