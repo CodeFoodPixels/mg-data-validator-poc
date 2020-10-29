@@ -7,7 +7,7 @@ import {
   FooBar,
 } from "../../types";
 
-const ShippingAddressSchema = Joi.object<AddressLocationInfo>({
+export const ShippingAddressSchema = Joi.object<AddressLocationInfo>({
   line1: Joi.string(),
   line2: Joi.string(),
   city: Joi.string(),
@@ -23,7 +23,7 @@ const ShippingAddressSchema = Joi.object<AddressLocationInfo>({
 export const CreateTransactionSchema = Joi.object<CreateTransaction>({
   id: Joi.number().required(),
   code: Joi.string().min(2).max(6).required(),
-  dateTimeCreated: Joi.date().iso().max("now"),
+  dateTimeCreated: Joi.date().iso().max("now").required(),
   dateTimeCompleted: Joi.date().iso().min(Joi.ref("dateTimeCreated")),
   addresses: Joi.array().items(
     Joi.object<Addresses>({
@@ -45,11 +45,10 @@ const validateCreateTransaction: IsValidInterface<CreateTransaction> = async (
   data
 ) => {
   try {
-    await CreateTransactionSchema.validateAsync(data);
+    await CreateTransactionSchema.validateAsync(data, { abortEarly: false });
     return true;
   } catch (e) {
     console.log("joi validation error", JSON.stringify(e, null, 2));
-
     return false;
   }
 };
