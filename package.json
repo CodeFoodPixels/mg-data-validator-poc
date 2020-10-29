@@ -19,6 +19,7 @@
   "homepage": "https://github.com/GaborGyorgy/mg-data-validator-poc#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "joi": "^17.3.0",
     "typescript": "^4.0.5"
   },
   "devDependencies": {
