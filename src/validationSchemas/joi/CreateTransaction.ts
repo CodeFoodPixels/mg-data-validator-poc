@@ -7,6 +7,19 @@ import {
   FooBar,
 } from "../../types";
 
+const ShippingAddressSchema = Joi.object<AddressLocationInfo>({
+  line1: Joi.string(),
+  line2: Joi.string(),
+  city: Joi.string(),
+  postCode: Joi.string(),
+  latitude: Joi.number(),
+  longitude: Joi.number(),
+})
+  .with("line1", ["city", "postCode"])
+  .and("latitude", "longitude")
+  .xor("line1", "latitude")
+  .required();
+
 export const CreateTransactionSchema = Joi.object<CreateTransaction>({
   id: Joi.number().required(),
   code: Joi.string().min(2).max(6).required(),
@@ -14,30 +27,8 @@ export const CreateTransactionSchema = Joi.object<CreateTransaction>({
   dateTimeCompleted: Joi.date().iso().min(Joi.ref("dateTimeCreated")),
   addresses: Joi.array().items(
     Joi.object<Addresses>({
-      shipFrom: Joi.object<AddressLocationInfo>({
-        line1: Joi.string(),
-        line2: Joi.string(),
-        city: Joi.string(),
-        postCode: Joi.string(),
-        latitude: Joi.number(),
-        longitude: Joi.number(),
-      })
-        .with("line1", ["city", "postCode"])
-        .and("latitude", "longitude")
-        .xor("line1", "latitude")
-        .required(),
-      shipTo: Joi.object<AddressLocationInfo>({
-        line1: Joi.string(),
-        line2: Joi.string(),
-        city: Joi.string(),
-        postCode: Joi.string(),
-        latitude: Joi.number(),
-        longitude: Joi.number(),
-      })
-        .with("line1", ["city", "postCode"])
-        .and("latitude", "longitude")
-        .xor("line1", "latitude")
-        .required(),
+      shipFrom: ShippingAddressSchema,
+      shipTo: ShippingAddressSchema,
     })
   ),
   stringOrNumberOrObj: Joi.alternatives(
