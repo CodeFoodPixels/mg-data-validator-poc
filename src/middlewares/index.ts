@@ -1,3 +1,1 @@
-import JoiValidationExample from "./validation/joi";
-
-export { JoiValidationExample };
+export * from "./validation/joi";
