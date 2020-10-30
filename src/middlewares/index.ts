@@ -1,2 +1,2 @@
 export * from "./validation/joi";
-export * from "./validation/validatejs";
+export * from "./validation/validatorjs";

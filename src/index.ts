@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import bodyParser from "body-parser";
-import { JoiValidationExample, JoiValidationExample2 } from "./middlewares";
+import { JoiValidationExample, JoiValidationExample2, ValidatorjsValidationExample } from "./middlewares";
 import {
   validateCreateTransaction,
   CreateTransactionSchema,
@@ -26,6 +26,15 @@ app.post(
     res.json({ hello: "world" });
   }
 );
+
+app.post(
+  "/validatorjs-example",
+  ValidatorjsValidationExample(validateCreateTransaction),
+  (_req: Request, res: Response) => {
+    res.json({ hello: "world" });
+  }
+);
+
 
 app.use((err, _req: Request, res: Response) => {
   if (err) {
