@@ -29,7 +29,7 @@ const joiErrorHelper = (error: ValidationError) => {
         break;
 
       default:
-        message = "Something went wrong";
+        message = e.message;
         break;
     }
 

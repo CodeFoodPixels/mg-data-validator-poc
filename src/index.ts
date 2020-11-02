@@ -15,7 +15,7 @@ app.post(
   "/joi-example-1",
   JoiValidationExample(validateCreateTransaction),
   (_req: Request, res: Response) => {
-    res.json({ hello: "world" });
+    res.json({ isValid: true });
   }
 );
 
@@ -23,7 +23,7 @@ app.post(
   "/joi-example-2",
   JoiValidationExample2(CreateTransactionSchema),
   (_req: Request, res: Response) => {
-    res.json({ hello: "world" });
+    res.json({ isValid: true });
   }
 );
 

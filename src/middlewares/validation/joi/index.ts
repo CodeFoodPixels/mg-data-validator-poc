@@ -13,7 +13,7 @@ const JoiValidationExample = (validateFn: Function) => async (
     next();
   } else {
     return res.status(500).json({
-      success: false,
+      isValid: false,
       message: "Something went wrong",
     });
   }
@@ -32,7 +32,7 @@ const JoiValidationExample2 = (schema: JoiSchema) => async (
     const { httpStatus, errors } = joiErrorHelper(e);
 
     return res.status(httpStatus).json({
-      success: false,
+      isValid: false,
       errors,
     });
   }
