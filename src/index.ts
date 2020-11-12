@@ -2,8 +2,8 @@ import express, { Application, Request, Response } from "express";
 import bodyParser from "body-parser";
 import { JoiValidationExample, JoiValidationExample2 } from "./middlewares";
 import {
-  validateCreateTransaction,
-  CreateTransactionSchema,
+  validateCreateRequest,
+  CreateRequestSchema,
 } from "./validationSchemas/joi";
 
 const app: Application = express();
@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 app.post(
   "/joi-example-1",
-  JoiValidationExample(validateCreateTransaction),
+  JoiValidationExample(validateCreateRequest),
   (_req: Request, res: Response) => {
     res.json({ isValid: true });
   }
@@ -21,7 +21,7 @@ app.post(
 
 app.post(
   "/joi-example-2",
-  JoiValidationExample2(CreateTransactionSchema),
+  JoiValidationExample2(CreateRequestSchema),
   (_req: Request, res: Response) => {
     res.json({ isValid: true });
   }

@@ -1,12 +1,14 @@
 import IsValidInterface from "./IsValidInterface";
-import CreateTransaction, { FooBar } from "./CreateTransaction";
-import Addresses from "./Addresses";
-import AddressLocationInfo from "./AddressLocationInfo";
+import { CreateRequest } from "./Request";
+import { Address } from "./Address";
+import { LineItem } from "./LineItem";
+import { OrderTaxRecordType } from "./OrderTaxRecordType";
+
 
 export {
   IsValidInterface,
-  CreateTransaction,
-  Addresses,
-  AddressLocationInfo,
-  FooBar,
+  CreateRequest,
+  Address,
+  LineItem,
+  OrderTaxRecordType
 };

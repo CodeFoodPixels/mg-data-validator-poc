@@ -1,53 +1,47 @@
 import Joi from "joi";
+
 import {
-  Addresses,
-  CreateTransaction,
-  AddressLocationInfo,
   IsValidInterface,
-  FooBar,
+  CreateRequest,
+  Address,
+  LineItem,
+  // OrderTaxRecordType
 } from "../../types";
 
-export const ShippingAddressSchema = Joi.object<AddressLocationInfo>({
+export const ShippingAddressSchema = Joi.object<Address>({
   line1: Joi.string(),
   line2: Joi.string(),
   city: Joi.string(),
-  postCode: Joi.string(),
-  latitude: Joi.number(),
-  longitude: Joi.number(),
+  country: Joi.string(),
+  postcode: Joi.string(),
+  region: Joi.string()
 })
-  .with("line1", ["city", "postCode"])
-  .and("latitude", "longitude")
-  .xor("line1", "latitude")
-  .required();
 
-export const CreateTransactionSchema = Joi.object<CreateTransaction>({
-  id: Joi.number().required(),
-  code: Joi.string().min(2).max(6).required(),
-  dateTimeCreated: Joi.date().iso().max("now").required().label("createdAt"),
-  dateTimeCompleted: Joi.date().iso().min(Joi.ref("dateTimeCreated")),
-  addresses: Joi.array()
-    .items(
-      Joi.object<Addresses>({
-        shipFrom: ShippingAddressSchema,
-        shipTo: ShippingAddressSchema,
-      })
-    )
-    .min(1),
-  stringOrNumberOrObj: Joi.alternatives(
-    Joi.string(),
-    Joi.number(),
-    Joi.object<FooBar>({
-      foo: Joi.string().required(),
-      bar: Joi.number().required(),
-    })
-  ).required(),
+export const LineItemSchema = Joi.object<LineItem>({
+  quantity: Joi.number().required(),
+  amount: Joi.number().when('....type', {
+    switch: [
+      { is: "SalesInvoice", then: Joi.number().positive() },
+      { is: "ReturnInvoice", then: Joi.number().negative() },
+    ],
+  }).required(),
+  itemCode: Joi.string().required()
+})
+
+export const CreateRequestSchema = Joi.object<CreateRequest>({
+  shippingAmount: Joi.number().required(),
+  currencyCode: Joi.string().required(),
+  date: Joi.date().iso().max("now").required(),
+  lineItems: Joi.array().items(LineItemSchema),
+  shipTo: ShippingAddressSchema,
+  type: Joi.string().valid("SalesInvoice", "ReturnInvoice").required()
 });
 
-const validateCreateTransaction: IsValidInterface<CreateTransaction> = async (
+const validateCreateRequest: IsValidInterface<CreateRequest> = async (
   data
 ) => {
   try {
-    await CreateTransactionSchema.validateAsync(data, { abortEarly: false });
+    await CreateRequestSchema.validateAsync(data, { abortEarly: false });
     return true;
   } catch (e) {
     console.log("joi validation error", JSON.stringify(e, null, 2));
@@ -55,4 +49,4 @@ const validateCreateTransaction: IsValidInterface<CreateTransaction> = async (
   }
 };
 
-export default validateCreateTransaction;
+export default validateCreateRequest;

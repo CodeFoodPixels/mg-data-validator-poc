@@ -1,10 +1,10 @@
-import validateCreateTransaction, {
-  CreateTransactionSchema,
+import validateCreateRequest, {
+  CreateRequestSchema,
   ShippingAddressSchema,
 } from "./CreateTransaction";
 
 export {
-  validateCreateTransaction,
-  CreateTransactionSchema,
+  validateCreateRequest,
+  CreateRequestSchema,
   ShippingAddressSchema,
 };
